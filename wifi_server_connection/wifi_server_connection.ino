@@ -30,14 +30,14 @@ void loop() {
  
     while (client.connected()) {
 
- /*
+ 
       while (client.available()>0) {
         char c = client.read();
         Serial.write(c);
       }
  
-     */
-     client.println(x,DEC);
+     
+    // client.println(x,DEC);
    
       delay(1000);
     }
