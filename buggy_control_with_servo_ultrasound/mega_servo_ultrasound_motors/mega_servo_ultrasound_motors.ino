@@ -14,7 +14,7 @@ Servo myservo;  // create servo object to control a servo
 
 
 int pos = 30;    // variable to store the servo position
-int counter = 0;
+int counter = 1;
 
 
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); 
@@ -27,28 +27,18 @@ int getPing(){
 
 
 void sweep_servo() {
-
-if(counter<=90 && counter>=0){
-   pos++;
-   if(counter==90){
-      counter=-counter;
-      } 
-  }
-if(counter>=-90 && counter<=0){
-   pos--;
-  }
 counter++;
+float rad = counter*(3.14159/180);
+pos = 45*sin(rad)+75;
 myservo.write(pos);              // tell servo to go to position in variable 'pos'
-
 }
 
 
 void setup() {
   
  
-  t.setInterval(30, sweep_servo);
+  t.setInterval(20, sweep_servo);
   t1.setInterval(200, getPing);
-  
   Serial.begin(9600);
   Serial1.begin(9600);
   //Setup Channel A
@@ -66,8 +56,10 @@ void loop() {
   
   t.run();
   int distance = getPing();
- // Serial.print(distance);
- // Serial.println("cm"); 
+  Serial.print(distance);
+  Serial.println("cm"); 
+ 
+   
  
 
  if (Serial1.available()) {  //When data is available in the buffer..
