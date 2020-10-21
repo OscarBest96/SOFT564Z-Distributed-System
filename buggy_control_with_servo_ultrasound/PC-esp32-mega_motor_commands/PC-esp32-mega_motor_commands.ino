@@ -1,15 +1,18 @@
 #include "WiFi.h" // ESP32 WiFi include
 #include "wifiConfig.h" // My WiFi configuration. 
 
+
 //192.168.0.77  <--- IP
 
 #define RXD2 16 //these are the ports responisble for serial port 2
 #define TXD2 17
+
  
 WiFiServer wifiServer(80);
 
+
 void setup() {
- 
+
   Serial.begin(9600);
   Serial2.begin(9600, SERIAL_8N1, RXD2, TXD2); // starts serial port 2, wired connection to arduino mega.
   delay(1000);
@@ -25,7 +28,6 @@ void setup() {
 }
  
 void loop() {
- 
   WiFiClient client = wifiServer.available();
  
   if (client) {
