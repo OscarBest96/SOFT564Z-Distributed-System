@@ -1,3 +1,5 @@
+#include <SimpleTimer.h>
+
 #include "WiFi.h" // ESP32 WiFi include
 #include "wifiConfig.h" // My WiFi configuration. 
 
@@ -6,10 +8,9 @@
 
 #define RXD2 16 //these are the ports responisble for serial port 2
 #define TXD2 17
-
  
 WiFiServer wifiServer(80);
-
+WiFiClient client;
 
 void setup() {
 
@@ -28,19 +29,32 @@ void setup() {
 }
  
 void loop() {
-  WiFiClient client = wifiServer.available();
+  client = wifiServer.available();
  
   if (client) {
+
       while (client.connected()) {
-             while (client.available()>0) {
-                    char command = client.read();
-                    Serial.print(command);
-                    Serial2.write(command); //write data to serial every second
-                    }
-             delay(1000);
+                  
+             if (client.available()) {
+             clientEvent();
              }
- 
+             
+             if (Serial2.available()) {
+              serial2Event();
+             }
+       }
+      
       client.stop();
       Serial.println("Client disconnected");
       }
+}
+
+void clientEvent(){
+char command = client.read();
+Serial2.write(command); //write data to serial every second
+}
+
+void serial2Event(){
+int value = Serial2.read();
+Serial.println(value);
 }

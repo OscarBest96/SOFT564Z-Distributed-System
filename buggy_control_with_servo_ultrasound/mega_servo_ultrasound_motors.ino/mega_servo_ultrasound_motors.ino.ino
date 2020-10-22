@@ -21,16 +21,30 @@ Servo myservo;  // create servo object to control a servo
 
 int pos = 30;    // variable to store the servo position
 int counter = 1;
+int distance;
+int water;
 bool autonomous = false;
 bool printLock = true;
+bool writeLock = true;
+bool startSensors = false;
 
 
 
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE); 
 
 
-int getPing(){
-  int distance = sonar.ping_cm();
+void getPing(){
+  if(startSensors==true){
+  distance = sonar.ping_cm();
+  
+      if(writeLock==true){
+      writeLock=false;
+      Serial1.write(distance);
+      Serial.println("distance");
+      writeLock=true;
+      }
+  }
+  
   if(autonomous==true){ 
       if(distance<=40){
         
@@ -62,12 +76,10 @@ int getPing(){
             //motor B: FORWARD
             digitalWrite(13, HIGH); //Establishes forward direction of Channel A
             digitalWrite(8, LOW);   //Disengage the Brake for Channel A
-            analogWrite(11, SPEED);   //Spins the motor on Channel A at full speed
-            
+            analogWrite(11, SPEED);   //Spins the motor on Channel A at full speed            
             }
             
   }
-  return distance;
 }
 
 
@@ -79,17 +91,22 @@ myservo.write(pos);              // tell servo to go to position in variable 'po
 }
 
 
-int water_sensor(){
-int water = analogRead(A5);
+void water_sensor(){
+if(startSensors==true){
+water = analogRead(A5);
+
+    if(writeLock==true){
+      writeLock=false;
+      Serial1.write(water);
+      Serial.println("water");
+      writeLock=true;
+    }
+}
 if(water>100){
   autonomous = false;
   digitalWrite(9, HIGH);   //Disengage the Brake for Channel A
   digitalWrite(8, HIGH);   //Disengage the Brake for Channel A
-  Serial.println("i'm here!");
-}
-return water;
-
- 
+  }
 }
 
 void setup() {
@@ -120,11 +137,6 @@ void loop() {
   t1.run();
   t2.run();
 
-  int distance = getPing();
-  int water = water_sensor();
- // Serial.print(distance);
- // Serial.println("cm"); 
- //  Serial.println(water);
   if (water>100 && printLock==true){
   lcd.print("WARNING: WATER");
   printLock=false;
@@ -135,19 +147,16 @@ void loop() {
     }
     printLock=true;
   }
- // Serial.println(pos); 
  
-   
- 
-
  if (Serial1.available()) {  //When data is available in the buffer..
     char command = Serial1.read();  //store value in 'C'
-    Serial.print(command);       //print recieved data to terminal
-    
-    
+     
           switch(command){
             
-          
+                case '1':
+                startSensors=!startSensors;
+                break;
+                
                 case 'w':
                 //motor A: FORWARD
                 digitalWrite(12, LOW); //Establishes forward direction of Channel A
@@ -198,7 +207,7 @@ void loop() {
                 digitalWrite(8, HIGH);   //Disengage the Brake for Channel A
                 break;  
 
-                case '1':
+                case 'n':
                 autonomous = !autonomous;
                 break;
 
