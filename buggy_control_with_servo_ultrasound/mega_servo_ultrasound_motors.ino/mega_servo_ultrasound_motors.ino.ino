@@ -39,8 +39,8 @@ void getPing(){
   
       if(writeLock==true){
       writeLock=false;
+      Serial1.print('A');
       Serial1.write(distance);
-      Serial.println("distance");
       writeLock=true;
       }
   }
@@ -94,11 +94,11 @@ myservo.write(pos);              // tell servo to go to position in variable 'po
 void water_sensor(){
 if(startSensors==true){
 water = analogRead(A5);
-
+if(water>255){water=255;}
     if(writeLock==true){
       writeLock=false;
+      Serial1.print('B');
       Serial1.write(water);
-      Serial.println("water");
       writeLock=true;
     }
 }
@@ -113,8 +113,8 @@ void setup() {
   
  
   t.setInterval(25, sweep_servo);
-  t1.setInterval(100, getPing);
-  t2.setInterval(200, water_sensor);
+  t1.setInterval(200, getPing);
+  t2.setInterval(400, water_sensor);
 
 
   Serial.begin(9600);
