@@ -3,7 +3,7 @@
 #include "commands.h"
 #include <NewPing.h>
 #include <LiquidCrystal_I2C.h>
-#include <IRremote.h>
+//#include <IRremote.h>
 
 #define TRIGGER_PIN 46
 #define ECHO_PIN 44
@@ -18,7 +18,7 @@ SimpleTimer t2;
 
 Servo myservo;  // create servo object to control a servo
 
-const int RECV_PIN = 31;
+//const int RECV_PIN = 31;
 int pos = 30;    // variable to store the servo position
 int counter = 1;
 int water;
@@ -29,14 +29,14 @@ bool startSensors = false;
 bool writeLock = true;
 bool printLock = true;
 
-IRrecv irrecv(RECV_PIN);
-decode_results results;
+//IRrecv irrecv(RECV_PIN);
+//decode_results results;
 
 
 void getPing(){
 if(startSensors==true){
   distance = sonar.ping_cm();
-  Serial.println(distance);
+  //Serial.println(distance);
   if(writeLock==true){
   writeLock=false;
   Serial1.print('A');
@@ -99,8 +99,8 @@ void setup() {
   t2.setInterval(300, water_sensor);
   Serial.begin(9600);
   Serial1.begin(9600);
-  irrecv.enableIRIn();
-  irrecv.blink13(true);
+//  irrecv.enableIRIn();
+ // irrecv.blink13(true);
   motor_setup();
   myservo.attach(7);  // attaches the servo on pin 9 to the servo object
   lcd.backlight();
@@ -116,24 +116,24 @@ void loop() {
   t2.run();
 
  WATER_WARNING();
- PC_COMMAND();
- IR_COMMAND();
+ COMMAND();
 }
 
 
 
 
 
- void PC_COMMAND(){
+ void COMMAND(){
    if (Serial1.available()) {  //When data is available in the buffer..
     char command = Serial1.read();  //store value in 'C'
+    Serial.println(command);
     switch(command){
             
           case '1':
           startSensors=!startSensors;
           break;
           
-          case 'w':
+          case 'w':  
           forward();
           break;
   
@@ -159,44 +159,4 @@ void loop() {
           break;
       }
      }
- }
-
- void IR_COMMAND(){
-  
-  if (irrecv.decode(&results)){
-    Serial.println(results.value, HEX);
-    switch(results.value){
-  
-      case 0xFFA25D:
-      startSensors=!startSensors;
-      break;
-      
-      case 0xFF18E7:  
-      forward();
-      break;
-
-      case 0xFF10EF:
-      left();
-      break;
-
-      case 0xFF5AA5:
-      right();
-      break;
-
-      case 0xFF4AB5:
-      backward();
-      break;
-    
-      case 0xFF38C7:
-      brakes();
-      break;  
-
-      case 0xFF6897:
-      startSensors=true;
-      autonomous = !autonomous;
-      break;
-      }
-      
-  irrecv.resume();
-  }
  }
