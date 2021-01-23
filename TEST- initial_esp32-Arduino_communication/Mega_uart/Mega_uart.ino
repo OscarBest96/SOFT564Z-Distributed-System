@@ -1,4 +1,4 @@
-int A =50;  //initialise dummy sensor value
+int A =-10;  //initialise dummy sensor value
 
 void setup() {
   Serial.begin(9600); // begin serial port 0 (for communication to terminal) for debugging
@@ -8,7 +8,7 @@ void setup() {
  
 void loop() { 
   
-  Serial1.write(A); //write data to serial every second
+  Serial1.print(m); //write data to serial every second
   delay(1000);
 
   while (Serial1.available()) {  //when data is available at RX pin 
