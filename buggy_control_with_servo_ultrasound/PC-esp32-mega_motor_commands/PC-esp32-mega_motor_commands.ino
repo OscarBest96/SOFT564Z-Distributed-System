@@ -140,7 +140,8 @@ if (ID=='A'){              //if ID == A
  void IR_COMMAND(){
   
   if (irrecv.decode(&results)){          //if IR code is received 
-     switch(results.value){
+     Serial.println(results.value, HEX); //convert code to HEX value
+     switch(results.value){              //evaluate value
   
       case 0xFFA25D:              //code 0xFFA25D (1 on IR remote) writes '1' to serial2 and stores value '1' in variable command
       Serial2.write('1');
