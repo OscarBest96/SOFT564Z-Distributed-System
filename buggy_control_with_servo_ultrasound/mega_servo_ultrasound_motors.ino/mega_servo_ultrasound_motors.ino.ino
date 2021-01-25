@@ -1,3 +1,13 @@
+/*
+3rd party libraries used:
+<Servo.h> //lib for servo control
+<SimpleTimer.h> //lib for timers
+<NewPing.h>  //lib for ultrasound sensor
+<LiquidCrystal_I2C.h> //lib for lcd display
+
+Links to these libraries are included in the reference section of the documentation.
+*/
+
 #include <Servo.h> //lib for servo control
 #include <SimpleTimer.h> //lib for timers
 #include "commands.h" //lib for motor control

@@ -1,3 +1,14 @@
+/*
+3rd party libraries used:
+<BlynkSimpleEsp32.h> //lib for Blynk app
+<SimpleTimer.h>      //lib for timer 
+"WiFi.h"             //ESP32 WiFi include
+"DHT.h"              //lib for DHT sensor
+<IRremote.h>         //lib for IR receiver
+
+Links to these libraries are included in the reference section of the documentation.
+*/
+
 #include <BlynkSimpleEsp32.h> //lib for Blynk app
 #include <SimpleTimer.h>      //lib for timer 
 #include "WiFi.h"             //ESP32 WiFi include
